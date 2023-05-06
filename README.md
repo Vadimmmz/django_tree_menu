@@ -1,24 +1,16 @@
-# Как запустить:
+<a name="navigation"></a> 
+# Содержание
 
-```bash
-git clone https://github.com/Vadimmmz/uptrade_test_task.git
+<!-- TOC -->
 
-python -m venv env
+- [Содержание](#navigation)
+    - [Текст задания](#task-text)
+    - [Комментарии к пунктам](#comments)
+    - [Как запустить](#install)
 
-# Windows
-source env/Scripts/activate
+<!-- /TOC -->
 
-# Linux
-source env/bin/activate
-
-pip install -r requirements.txt
-
-cd django_tree_app
-
-python manage.py runserver
-
-```
-
+<a name="task-text"></a> 
 ## Текст задания
 ### Задача :
 Нужно сделать django app, который будет реализовывать древовидное меню, соблюдая следующие условия:
@@ -44,11 +36,33 @@ python manage.py runserver
 При решении тестового задания у вас не должно возникнуть вопросов. Если появляются вопросы, вероятнее всего, у вас недостаточно знаний.
 Задание выложить на гитхаб.
 
-### Комментарии к пунктам :
+<a name="comments"></a> 
+## Комментарии к пунктам
 4) - Логин и пароль от админки: root 12345
    - Для более приятного вида админки, при добавлении пунктов меню была добавлена форма AddItemMenuForm
-   
+
 
 7) Переход происходит через named url
 
+<a name="install"></a> 
+## Как запустить:
+
+```bash
+git clone https://github.com/Vadimmmz/uptrade_test_task.git
+
+python -m venv env
+
+# Windows
+source env/Scripts/activate
+
+# Linux
+source env/bin/activate
+
+pip install -r requirements.txt
+
+cd django_tree_app
+
+python manage.py runserver
+
+```
 
