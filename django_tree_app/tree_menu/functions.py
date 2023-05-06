@@ -1,20 +1,22 @@
 from tree_menu.models import MenuItem
+from django.http import HttpRequest
+from main_site.views import GetRequest
 
 
-def find_allow_parents(menu_list: list, allowed_parrents: set) -> None:
+def find_allow_parents(menu_list: list, allowed_parents: set) -> None:
     """
         This function allow find all parent-entries in current branch
     """
 
     all_items_checked = False
     for i in menu_list:
-        if i.label in allowed_parrents:
-            if i.parent not in allowed_parrents and i.parent != 'no':
-                allowed_parrents.add(i.parent)
+        if i.label in allowed_parents:
+            if i.parent not in allowed_parents and i.parent != 'no':
+                allowed_parents.add(i.parent)
 
     else:
         if all_items_checked:
-            find_allow_parents(menu_list, allowed_parrents)
+            find_allow_parents(menu_list, allowed_parents)
 
 
 def find_current_url(current_url: str, menu_list: list) -> tuple[str, set]:
@@ -37,61 +39,11 @@ def find_current_url(current_url: str, menu_list: list) -> tuple[str, set]:
     return current_founded, allowed_parrents
 
 
-def nested_hierarchy(request, menu_list: list) -> list:
+def menu_child(current_url: str, menu_list: list, parent: str, menu: list) -> None:
     """
-        For building nested-style meny
+        Function for building nested items
+
     """
-
-    current_url = request.path
-    current_founded = False
-    allowed_parrents = set()
-    menu = []
-
-    for i in menu_list:
-        match = MenuItem.get_absolute_url(i)
-        if match == current_url:
-            current_founded = i.label
-            allowed_parrents.add(i.label)
-            print(match)
-            print(current_founded)
-
-    # finding all suitable parents
-    find_allow_parents(menu_list, allowed_parrents)
-    print(allowed_parrents)
-
-    # finding all suitable entries in database request
-    for i in menu_list:
-        values = dict()
-
-        if i.label == current_founded:
-            values['label'] = i.label
-            values['url'] = i.url
-            values['parent'] = i.parent
-            values['has_children'] = i.has_children
-            menu.append(values)
-
-        elif i.parent == 'no':
-            values['label'] = i.label
-            values['url'] = i.url
-            values['parent'] = i.parent
-            if i.label in allowed_parrents:
-                values['has_children'] = True
-            else:
-                values['has_children'] = False
-            menu.append(values)
-
-        elif i.parent in allowed_parrents:
-            values['label'] = i.label
-            values['url'] = i.url
-            values['parent'] = i.parent
-            values['has_children'] = i.has_children
-            menu.append(values)
-        print(allowed_parrents)
-
-    return menu
-
-
-def menu_child(current_url: str, menu_list: list, parent: str, menu: list):
     for i in menu_list:
         values = dict()
         if i.parent == parent:
@@ -110,19 +62,34 @@ def menu_child(current_url: str, menu_list: list, parent: str, menu: list):
                 menu.append(values)
 
 
-def menu_hierarchy(request, menu_list: list) -> list:
+def menu_hierarchy(menu_list: list) -> list:
     """
         For building comment-style meny
     """
 
-    current_url = request.path
+    current_url = GetRequest.request
     menu = []
 
+    # Determine active menu item and finding items which should be disclosed
     current_founded, allowed_parrents = find_current_url(current_url, menu_list)
     find_allow_parents(menu_list, allowed_parrents)
 
+    # if True than all next menu-items won't be disclosed
     no_open = False
 
+    # Not open any item if current URL not in menu items URl's
+    if not current_founded:
+        for i in menu_list:
+            values = dict()
+            if i.parent == "no":
+                values['label'] = i.label
+                values['url'] = i.url
+                values['parent'] = i.parent
+                values['has_children'] = False
+                menu.append(values)
+        return menu
+
+    # Finding all main menu items and them child-items for each one
     for i in menu_list:
         values = dict()
         if i.parent == "no":
@@ -138,12 +105,11 @@ def menu_hierarchy(request, menu_list: list) -> list:
     for i in menu:
         if i['label'] == current_founded:
             i['current'] = True
-            print('Текущий: ', i['label'])
-            print('parent: ', i['parent'])
-            print('allowed_parents: ', allowed_parrents)
+
             no_open = True
             continue
 
+        # disclosing first nested items before active menu item
         if no_open:
             if i['parent'] != current_founded:
                 i['has_children'] = False

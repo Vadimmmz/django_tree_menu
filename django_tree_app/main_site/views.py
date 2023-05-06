@@ -1,5 +1,12 @@
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpRequest
 from django.shortcuts import render
+
+
+class GetRequest:
+    """
+        This class is needed to store the request and use it in tree_menu_tags.py
+    """
+    request = None
 
 
 def index(request):
@@ -19,6 +26,9 @@ def show_page(request, page_slug):
         A function for viewing certain pages that are accessible by a slug
 
     """
+
+    # send request to usertag
+    GetRequest.request = HttpRequest.get_full_path(request)
 
     context = {
         'title': f'{page_slug}',
