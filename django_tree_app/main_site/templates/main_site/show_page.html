@@ -1,0 +1,10 @@
+{% extends 'main_site/base.html' %}
+{% load tree_menu_tags %}
+
+        {% block show_page %}
+                {% draw_menu request 'main_menu' %}
+
+                <h2>Некая страница</h2>
+                <p>Которая находится по адресу <b>https://site_name/post/{{ page_slug }}</b></p>
+
+        {% endblock show_page %}

@@ -1,0 +1,22 @@
+        {% with parent=m.label %}
+            <ul>
+                {% for m in menu %}
+                    {% if parent == m.parent %}
+                        {% if m.has_children == False %}
+                            {% if m.current %}
+                                <li><b><a href="{% url 'show_page' m.url %}"><< {{ m.label }} >></a></b></li>
+                            {% else %}
+                                <li><a href="{% url 'show_page' m.url %}">{{ m.label }}</a></li>
+                            {% endif %}
+                        {% else %}
+                                {% if m.current %}
+                                    <li><b><a href="{% url 'show_page' m.url %}"><< {{ m.label }} >></a></b></li>
+                                {% else %}
+                                    <li><a href="{% url 'show_page' m.url %}">{{ m.label }}</a></li>
+                                {% endif %}
+                            {% include 'tree_menu/menu_child.html'%}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endwith %}

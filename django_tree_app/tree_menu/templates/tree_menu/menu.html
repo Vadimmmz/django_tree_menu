@@ -1,0 +1,20 @@
+{% if menu %}
+
+<h3>Меню</h3>
+<ul>
+{% for m in menu %}
+    {% if m.parent == "no" %}
+        {% if m.current %}
+            <li><b><a href="{% url 'show_page' m.url %}"><< {{ m.label }} >></a></b></li>
+        {% else %}
+            <li><a href="{% url 'show_page' m.url %}">{{ m.label }}</a></li>
+        {% endif %}
+        {% if m.has_children%}
+            {% include 'tree_menu/menu_child.html'%}
+        {% endif %}
+    {% endif %}
+{% endfor%}
+</ul>
+<hr>
+
+{% endif %}
