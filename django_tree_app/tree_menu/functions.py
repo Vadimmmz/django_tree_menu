@@ -33,8 +33,6 @@ def find_current_url(current_url: str, menu_list: list) -> tuple[str, set]:
         if match == current_url:
             current_founded = i.label
             allowed_parrents.add(i.label)
-            print(match)
-            print(current_founded)
 
     return current_founded, allowed_parrents
 
