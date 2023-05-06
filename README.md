@@ -48,7 +48,7 @@
 ## Как запустить:
 
 ```bash
-git clone https://github.com/Vadimmmz/uptrade_test_task.git
+git clone https://github.com/Vadimmmz/uptrader_test_task.git
 
 python -m venv env
 
