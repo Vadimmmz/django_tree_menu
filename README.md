@@ -1,3 +1,23 @@
+# Как запустить:
+
+```bash
+git clone https://github.com/Vadimmmz/uptrade_test_task.git
+
+python -m venv env
+
+# Windows
+source env/Scripts/activate
+
+# Linux
+source env/bin/activate
+
+pip install -r requirements.txt
+
+cd django_tree_app
+
+python manage.py runserver
+
+```
 
 ## Текст задания
 ### Задача :
